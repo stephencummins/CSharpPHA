@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Xml.Linq;
 
@@ -37,9 +37,6 @@ namespace RESTMVCWeb.Controllers
 
             ViewBag.appTitle = await GetWebTitle(appRequestUri, appToken);
 
-            //PWA Context
-
-
             return View();
         }
 
@@ -56,5 +53,6 @@ namespace RESTMVCWeb.Controllers
             XElement root = XElement.Parse(responseString);
             return root.Value;
         }
+
     }
 }
