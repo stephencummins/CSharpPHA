@@ -37,6 +37,8 @@ namespace RESTMVCWeb.Controllers
 
             ViewBag.appTitle = await GetWebTitle(appRequestUri, appToken);
 
+            //PWA Context
+
             return View();
         }
 
