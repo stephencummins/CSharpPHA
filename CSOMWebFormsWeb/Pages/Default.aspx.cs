@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls; 
+using System.Web.UI.WebControls;
 using Microsoft.ProjectServer.Client;
+using Microsoft.SharePoint.Client;
 
 namespace CSOMWebFormsWeb
 {
@@ -58,9 +59,41 @@ namespace CSOMWebFormsWeb
 
                 foreach (PublishedProject pubProj in projectContext.Projects)
                 {
-                    Response.Write(string.Format("{0} :{1} : {2} &lt;/br&gt;", pubProj.Id.ToString(), pubProj.Name, pubProj.CreatedDate.ToString()));
+                    Response.Write(string.Format("{0} :{1} : {2} &lt;/br&gt;", 
+                        pubProj.Id.ToString(), pubProj.Name, pubProj.CreatedDate.ToString()
+                        ));
                 }
+
+                //Project Tasks
+                projectContext.Load(projectContext.Projects,
+                Pro => Pro.IncludeWithDefaultProperties(projectDetail => projectDetail.StartDate, 
+                projectDetail => projectDetail.FinishDate, projectDetail => projectDetail.Tasks, 
+                projectDetail => projectDetail.PercentComplete, projectDetail => projectDetail.ProjectResources, 
+                projectDetail => projectDetail.CustomFields, projectDetail => projectDetail.EnterpriseProjectType));
+                projectContext.ExecuteQuery();
+                foreach (PublishedProject Project in projectContext.Projects)
+                {
+                    foreach (var Multask in Project.Tasks)
+                    {
+                        var current = DateTime.Now.Date;
+                        var previous = Convert.ToDateTime(Multask.Start).Date;
+
+                        if (previous == current)
+                        {
+                            Response.Write(string.Format("{0} :{1} : {2} &lt;/br&gt;", 
+                                Project.Name,
+                                Multask.Name, 
+                                Multask.Start,
+                                Multask.Finish,
+                                Multask.PercentComplete
+                                ));
+                        }
+                    }
+                }
+
             }
+
+        }
+
         }
     }
-}
