@@ -17,6 +17,9 @@ namespace RESTMVCWeb.Controllers
         [SharePointContextFilter]
         public async Task<ActionResult> Index()
         {
+
+
+
             SharePointAcsContext spContext = (SharePointAcsContext)SharePointContextProvider.Current.GetSharePointContext(HttpContext);
 
             string accessToken = spContext.UserAccessTokenForSPHost;
@@ -40,7 +43,19 @@ namespace RESTMVCWeb.Controllers
             .Append("_api/web/title");
 
             ViewBag.appTitle = await GetWebTitle(appRequestUri, appToken);
+          
+            //Project Context
+            using (var projectContext = ContextHelper.GetClientContext(Request.Url))
+            {
+                // Query the Project Context
+                //projectContext.Load(projectContext.Projects);
+               // projectContext.ExecuteQuery();
 
+                projectContext.Load(projectContext.Web, web => web.Title);
+                projectContext.ExecuteQuery();
+                ViewBag.Message = projectContext.Web.Title;
+
+            }
             return View();
         }
 

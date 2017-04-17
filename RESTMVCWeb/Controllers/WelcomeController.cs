@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Xml.Linq;
 
@@ -26,8 +27,17 @@ namespace RESTMVCWeb.Controllers
                 .Append(spHostUrl)
                 .Append("_api/web/currentuser");
 
-            // Set User Context
+            //Get The Project Context
 
+            //var context = new HttpContextWrapper(HttpContext.Current);
+            //HttpRequestBase request2 = context.Request;
+
+            //using (var projectContext = ContextHelper.GetClientContext(request2.Url))
+            //{
+            //    // Query the Project Data
+            //    projectContext.Load(projectContext.Projects);
+            //    projectContext.ExecuteQuery();
+            //}
 
             HttpClient client = new HttpClient();
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri.ToString());
