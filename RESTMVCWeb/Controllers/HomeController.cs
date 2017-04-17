@@ -17,7 +17,11 @@ namespace RESTMVCWeb.Controllers
         [SharePointContextFilter]
         public async Task<ActionResult> Index()
         {
-            var spContext = SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+            SharePointAcsContext spContext = (SharePointAcsContext)SharePointContextProvider.Current.GetSharePointContext(HttpContext);
+
+            string accessToken = spContext.UserAccessTokenForSPHost;
+            System.Web.HttpContext.Current.Session["AccessToken"] = accessToken;
+            System.Web.HttpContext.Current.Session["SPHostUrl"] = spContext.SPHostUrl;
 
             //Host Web
             string hostToken = spContext.UserAccessTokenForSPHost;
